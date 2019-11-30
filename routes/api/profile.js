@@ -1,0 +1,10 @@
+// when routes in sepasrate files we use express routing
+const express = require("express");
+const router = express.Router();
+
+// @route    GET api/profile
+// @desc     test route
+// @access   Public
+router.get("/", (req, res) => res.send("Profile Route"));
+
+module.exports = router;
