@@ -11,6 +11,9 @@ const app = express();
 //Connect db function exported from db.js
 connectDB();
 
+//middleware init
+app.use(express.json({ extended: false }));
+
 //create port variable which will check for a
 //local environment port OR default 5000
 const PORT = process.env.PORT || 5000;
