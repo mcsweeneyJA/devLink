@@ -9,6 +9,7 @@ const config = require("config");
 
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
+const Posts = require("../../models/Posts");
 
 // @route    GET api/profile/me
 // @desc     Get current users profile
@@ -149,7 +150,8 @@ router.get("/user/:user_id", async (req, res) => {
 // @access   Private
 router.delete("/", auth, async (req, res) => {
   try {
-    //TODO remove user posts also
+    await Posts.deleteMany({ user: req.user.id }); //remove posts
+
     //remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
     //remove user
@@ -257,7 +259,7 @@ router.put(
       check("degree", "degree is needed")
         .not()
         .isEmpty(),
-      check("field of study", "field of study is needed")
+      check("fieldofstudy", "field of study is needed")
         .not()
         .isEmpty(),
       check("from", "From date is needed")
