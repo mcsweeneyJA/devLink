@@ -15,10 +15,10 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
         <Spinner />
       ) : (
         <Fragment>
-          <h1 className="large text-primary">Developers </h1>
+          <h1 className="large text-primary">Users </h1>
           <p className="lead">
             <i className="fab fa-connectdevelop"></i> Browse and connect with
-            developers
+            creators
           </p>
           <div className="profiles">
             {profiles.length > 0 ? (
@@ -36,7 +36,7 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
 };
 
 Profiles.propTypes = {
-  getprofiles: PropTypes.func.isRequired,
+  getProfiles: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired
 };
 

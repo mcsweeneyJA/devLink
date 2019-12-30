@@ -1,13 +1,10 @@
-// when routes in sepasrate files we use express routing
 const express = require("express");
 const router = express.Router();
-//documentation: https://express-validator.github.io/docs/
-const { check, validationResult } = require("express-validator");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
-//JWT docs https://jwt.io/introduction/
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const { check, validationResult } = require("express-validator/check");
 
 const User = require("../../models/User");
 
@@ -17,39 +14,38 @@ const User = require("../../models/User");
 router.post(
   "/",
   [
-    check("name", "dont forget to enter your name!")
+    check("name", "Name is required")
       .not()
       .isEmpty(),
-    check("email", "please connect an email to continue").isEmail(),
-    check("password", "please enter a password > 6 characters").isLength({
-      min: 6
-    })
+    check("email", "Please include a valid email").isEmail(),
+    check(
+      "password",
+      "Please enter a password with 6 or more characters"
+    ).isLength({ min: 6 })
   ],
   async (req, res) => {
     const errors = validationResult(req);
-    //if there are errors..
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
     const { name, email, password } = req.body;
+
     try {
-      // Check user exists -> error
       let user = await User.findOne({ email });
+
       if (user) {
         return res
           .status(400)
-          .json({ errors: [{ msg: "this user already exists" }] });
+          .json({ errors: [{ msg: "User already exists" }] });
       }
 
-      // Get user gravatar
       const avatar = gravatar.url(email, {
         s: "200",
         r: "pg",
         d: "mm"
       });
-      // Encrypt password
-      //creates new instance of user - doesnt save
+
       user = new User({
         name,
         email,
@@ -58,11 +54,10 @@ router.post(
       });
 
       const salt = await bcrypt.genSalt(10);
+
       user.password = await bcrypt.hash(password, salt);
 
       await user.save();
-
-      // return Jsonwebtoken
 
       const payload = {
         user: {
@@ -72,11 +67,9 @@ router.post(
 
       jwt.sign(
         payload,
-        config.get("jwtsecret"),
-        //expiration of jwt to change
-        { expiresIn: 36000 },
+        config.get("jwtSecret"),
+        { expiresIn: 360000 },
         (err, token) => {
-          //check for error otherwise send token to client
           if (err) throw err;
           res.json({ token });
         }

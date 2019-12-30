@@ -17,7 +17,7 @@ const Dashboard = ({
   useEffect(() => {
     getCurrentProfile();
   }, [getCurrentProfile]);
-
+  //if profile is null and still loading - spin
   return loading && profile === null ? (
     <Spinner />
   ) : (
@@ -31,7 +31,7 @@ const Dashboard = ({
           <DashboardActions />
           <Experience experience={profile.experience} />
           <Education education={profile.education} />
-          <div classNAme="my-2">
+          <div className="my-2">
             <button className="btn btn-danger" onClick={() => deleteAccount()}>
               <i className="fas fa-user-minus"></i>
               Permanently Delete Account
@@ -40,7 +40,7 @@ const Dashboard = ({
         </Fragment>
       ) : (
         <Fragment>
-          <p> You have not yet created a prpfile, please add some info </p>
+          <p> You have not yet created a profile, please add some info </p>
           <Link to="/create-profile" className="btn btn-primary my-1">
             Create profile
           </Link>

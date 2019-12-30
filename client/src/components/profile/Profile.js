@@ -38,7 +38,7 @@ const Profile = ({
                 Edit profile
               </Link>
             )}
-          <div class="profile-grid my-1">
+          <div className="profile-grid my-1">
             <ProfileTop profile={profile}></ProfileTop>
             <ProfileAbout profile={profile}></ProfileAbout>
             <div className="profile-exp bg-white p-2">
